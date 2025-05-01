@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_CLASSES 10
+#define DAYS 5
+#define SLOTS 5
+
+int main() {
+    char subjects[MAX_CLASSES][50];
+    char timetable[DAYS][SLOTS][50];
+    char *days[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    char *times[] = {"9:00-10:00", "10:00-11:00", "11:00-12:00", "1:00-2:00", "2:00-3:00"};
+    int num_classes, i, j, k = 0;
+
+    printf("Enter number of subject-teacher pairs (max %d): ", MAX_CLASSES);
+    scanf("%d", &num_classes);
+    getchar();
+
+    if (num_classes < 1 || num_classes > MAX_CLASSES) {
+        printf("Invalid number of entries.\n");
+        return 1;
+    }
+
+    for (i = 0; i < num_classes; i++) {
+        printf("Enter subject and teacher for class %d (e.g., Math-Mr.Smith): ", i + 1);
+        fgets(subjects[i], sizeof(subjects[i]), stdin);
+        subjects[i][strcspn(subjects[i], "\n")] = 0;
+    }
+
+    for (i = 0; i < DAYS; i++) {
+        for (j = 0; j < SLOTS; j++) {
+            strcpy(timetable[i][j], subjects[k]);
+            k = (k + 1) % num_classes;
+        }
+    }
+
+    printf("\nWeekly Timetable:\n");
+    printf("Day\\Time\t\t");
+    for (j = 0; j < SLOTS; j++) {
+        printf("%s\t", times[j]);
+    }
+    printf("\n");
+
+    for (i = 0; i < DAYS; i++) {
+        printf("%-10s\t", days[i]);
+        for (j = 0; j < SLOTS; j++) {
+            printf("%-15s\t", timetable[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
